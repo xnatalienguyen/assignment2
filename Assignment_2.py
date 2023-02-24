@@ -16,6 +16,8 @@ class SignalDetection:
     def criterion(self):
         c = (-0.5) * ((self.hit_dist) + (self.false_dist))
         return c
+    def __add__(self, other):
+        return SignalDetection(self.hit + other.hit, self.misses + other.misses, self.falseAlarm + other.falseAlarm, self.correctRejections + other.correctRejections)
 
 import unittest 
 
@@ -46,6 +48,12 @@ class TestSignalDetection(unittest.TestCase):
         obtained = sd.criterion()
         # Compare calculated and expected criterion
         self.assertAlmostEqual(obtained, expected, places=6)
+    def test_addition(self):
+        sd = SignalDetection(1, 1, 2, 1) + SignalDetection(2, 1, 1, 3)
+        expected = SignalDetection(3, 2, 3, 4).criterion()
+        obtained = sd.criterion()
+        # Compare calculated and expected criterion
+        self.assertEqual(obtained, expected)
 
 if __name__ == '__main__':
     unittest.main()
