@@ -20,7 +20,7 @@ class SignalDetection:
         return SignalDetection(self.hit + other.hit, self.misses + other.misses, self.falseAlarm + other.falseAlarm, self.correctRejections + other.correctRejections)
     def __mul__(self, scalar):
         return SignalDetection(self.hit * scalar, self.misses * scalar, self.falseAlarm * scalar, self.correctRejections * scalar)
-        
+
 import unittest 
 
 class TestSignalDetection(unittest.TestCase):
@@ -62,6 +62,22 @@ class TestSignalDetection(unittest.TestCase):
         obtained = sd.criterion()
         # Compare calculated and expected criterion
         self.assertEqual(obtained, expected)
+    def test_corruption(self):
+        sd = SignalDetection(1, 2, 3, 1)
+        sd.__hits = 5
+        sd.__misses = 5
+        sd.__correctRejections = 5
+        sd.__falseAlarm = 5
+        sd.__hit_rate = 5
+        sd.__false_alarm_rate = 5
+        sd.__hit_dist = 5
+        sd.__false_dist = 5
+        expected_c = SignalDetection(1, 2, 3, 1).criterion()
+        obtained_c = sd.criterion()
+        expected_d = SignalDetection(1, 2, 3, 1).d_prime()
+        obtained_d = sd.d_prime()
+        self.assertEqual(obtained_c, expected_c)
+        self.assertEqual(obtained_d, expected_d)
 
 if __name__ == '__main__':
     unittest.main()
