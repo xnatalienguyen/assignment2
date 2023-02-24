@@ -9,11 +9,12 @@ class SignalDetection:
         self.hit_rate = hits / (hits + misses)
         self.false_alarm_rate = falseAlarm / (falseAlarm + correctRejections)
         self.hit_dist = NormalDist().inv_cdf(self_hit.rate)
+        self.false_dist = NormalDist().inv_cdf(self.false_alarm_rate)
     def d_prime(self):
-        d = self.hit_dist - (NormalDist().inv_cdf(self.false_alarm_rate))
+        d = self.hit_dist - (self.false_dist)
         return d
     def criterion(self):
-        c = (-0.5) * ((self.hit_dist) + NormalDist().inv_cdf(self.false_alarm_rate))
+        c = (-0.5) * ((self.hit_dist) + (self.false_dist))
         return c
 
 import unittest 
